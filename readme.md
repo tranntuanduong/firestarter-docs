@@ -134,5 +134,5 @@ If you're a new developer joining the team, follow this order to get familiar:
 - Docker (optional, for backend or data-feed containerization)
 
 ---
-![Alt text]([[https://prnt.sc/w-2FI4aF9SeM](https://prnt.sc/w-2FI4aF9SeM)](https://prnt.sc/w-2FI4aF9SeM)](https://drive.google.com/file/d/17U7_7Zcj0vrVNYnPs_wdmBAzedyChu6s/view?usp=sharing))
+![Alt text](https://github.com/tranntuanduong/firestarter-docs/blob/main/Untitled-2024-06-07-1450.png)
 
