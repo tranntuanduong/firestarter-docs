@@ -137,7 +137,8 @@ If you're a new developer joining the team, follow this order to get familiar:
 ![Alt text](https://github.com/tranntuanduong/firestarter-docs/blob/main/Untitled-2024-06-07-1450.png)
 
 
-===================================
+---
+---
 # 🔥 Firestarter Smart Contract Deployment Guide
 
 This guide walks you through the full process of deploying the Firestarter smart contracts on `baseSepolia` (or your desired network). The deployment includes:
