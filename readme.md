@@ -599,4 +599,13 @@ templates:
 7. deploy: graph deploy test
 
 ---
+# Firestarter-data-feed
+1. setup env
+```
+GRAPH_CLIENT=https://api.studio.thegraph.com/query/115248/candle-v-01/version/latest
+GRAPH_CLIENT_TRANSACTIONS=https://api.studio.thegraph.com/query/115248/transactions-v-01/version/latest
+```
+2. install node_modules: currently we using yarn, so if you guys use npm or pnpm, maybe it can have bug here (yarn.lock is very important)
+3. build srource code with yarn build
+4. deploy code: using pm2 or docker its your option.
 
