@@ -81,28 +81,28 @@ Firestarter is a decentralized ecosystem that includes features such as asset to
 ### ✅ Deployment Order:
 
 1. **Smart Contracts**
-   - Deploy `firestarter-evm-smc-hardhat` (Uniswap V2 fork).
-   - Deploy `firestarter-evm-smc-hardhat` (Bonding Curve).
+   - Deploy `firestarter-smart-contract` (Uniswap V2 fork, Bonding curve).
    - Deploy `firestarter-staking-sc` (Staking contracts).
 
 2. **Update Configurations**
    - Copy all deployed contract addresses into the configuration files of:
-     - `firestarter-evm-fe`
+     - `firestarter-frontend`
      - `firestarter-admin`
      - `firestarter-backend`
 
 3. **Deploy Subgraphs**
-   - Deploy `firestarter-subgraph` (transactions).
-   - Deploy `subgraph-candles` (candlestick data).
+   - Deploy `firestarter-subgraph-transactions` (transactions).
+   - Deploy `subgraph-subgrapgh-candles` (candlestick data).
    - Recommended tool: [The Graph](https://thegraph.com/)
 
 4. **Deploy `data-feed`**
+   - Deploy `firestarter-data-feed`
    - Use `pairFactory` from Uniswap V2 fork to identify pairs.
    - Feed transaction and candle data to the frontend.
 
 5. **Deploy Frontend Interfaces**
-   - Deploy `firestarter-evm-fe` (main user interface).
-   - Deploy `firestarter-exchange-interface` (DEX interface).
+   - Deploy `firestarter-frontend` (main user interface).
+   - Deploy `firestarter-dex` (DEX interface).
    - Deploy `firestarter-admin` (admin panel).
 
 ---
@@ -118,10 +118,10 @@ Firestarter is a decentralized ecosystem that includes features such as asset to
 
 If you're a new developer joining the team, follow this order to get familiar:
 
-1. Understand the user flow in `firestarter-evm-fe`.
+1. Understand the user flow in `firestarter-frontend`.
 2. Explore backend logic in `firestarter-backend`.
-3. Dive into smart contracts in `firestarter-evm-sm-hardhat` and `firestarter-staking-sc`.
-4. Learn how data is indexed and transformed using `firestarter-subgraph`, `subgraph-candles`, and `data-feed`.
+3. Dive into smart contracts in `firestarter-smart-contract` and `firestarter-staking-sc`.
+4. Learn how data is indexed and transformed using `firestarter-subgraph-transactions`, `firestarter-subgraph-candles`, and `firestarter-data-feed`.
 5. Understand how the admin team uses `firestarter-admin` to manage the app.
 
 ---
