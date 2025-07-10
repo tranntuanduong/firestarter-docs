@@ -432,7 +432,9 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=513830874400
 VITE_FIREBASE_APP_ID=1:513830874400:web:f1647b2f315dcb7c683b45
 ```
 
-3. deploy with vercel or pm2 or dockers.
+3. install node_modules (currently using pnpm, please keep this)
+4. build code
+5. deploy with vercel or pm2 or dockers.
 
 ---
 # Firestarter Admin
@@ -461,8 +463,9 @@ VITE_ENV=dev
 VITE_NETWORK=devnet
 VITE_API_URL=https://api.example.com
 ```
-
-3. Deploy with vercel pm2 or dockers
+3. install node_modules (currently using pnpm, please keep this)
+4. build code
+5. deploy with vercel or pm2 or dockers.
 
 ---
 # Firestarter-subgraph-transactions
@@ -605,7 +608,28 @@ templates:
 GRAPH_CLIENT=https://api.studio.thegraph.com/query/115248/candle-v-01/version/latest
 GRAPH_CLIENT_TRANSACTIONS=https://api.studio.thegraph.com/query/115248/transactions-v-01/version/latest
 ```
-2. install node_modules: currently we using yarn, so if you guys use npm or pnpm, maybe it can have bug here (yarn.lock is very important)
-3. build srource code with yarn build
-4. deploy code: using pm2 or docker its your option.
+2. update WETH_ADDRESS, USDT_WETH_PAIR, WHITELIST in the /src/mappings/pricing.ts
+3. install node_modules: currently we using yarn, so if you guys use npm or pnpm, maybe it can have bug here (yarn.lock is very important)
+4. build srource code with yarn build
+5. deploy code: using pm2 or docker its your option.
+
+---
+# Firestarter-dex
+1. setup env
+```
+REACT_APP_CHAIN_ID="84532" /chainid
+SKIP_PREFLIGHT_CHECK=true
+```
+
+2. update the config file
+```ts
+const config = {
+  ROUTER_ADDRESS: '0xe0e4E95C9E4aa75516d40aBA8B320b5516b66c10',
+  FACTORY_ADDRESS: '0xDE9A867A37105A156a05FcD208779aE349188cE5',
+  INIT_CODE_HASH: '0x7c60607a50a284528a3db57b2c17f62453d764f683ae1557a4710498beba6ee0',
+  WETH: '0x4200000000000000000000000000000000000006'
+}
+```
+3. init pair USDT_WETH_PAIR that can use to calculate priceUSD on dex
+
 
