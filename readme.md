@@ -17,7 +17,7 @@ Firestarter is a decentralized ecosystem that includes features such as asset to
 
 ---
 
-### 2. `firestarter-evm-fe`
+### 2. `firestarter-frontend`
 - **Description**: The main web application for end users.
 - **Key Features**:
   - Tokenize assets via bonding curve.
@@ -38,7 +38,7 @@ Firestarter is a decentralized ecosystem that includes features such as asset to
 
 ---
 
-### 4. `firestarter-evm-sm-hardhat`
+### 4. `firestarter-smart-contract`
 - **Description**: Smart contract code for:
   - Bonding curve mechanism.
   - Forked Uniswap V2 DEX contracts.
@@ -50,25 +50,25 @@ Firestarter is a decentralized ecosystem that includes features such as asset to
 
 ---
 
-### 6. `firestarter-exchange-interface`
+### 6. `firestarter-dex`
 - **Description**: Frontend interface for the Uniswap V2 fork.
 - **Features**: Swap tokens, manage liquidity pools, view charts and transactions.
 
 ---
 
-### 7. `firestarter-subgraph`
+### 7. `firestarter-subgraph-transactions`
 - **Description**: Subgraph to index DEX transaction events.
 - **Usage**: Display transaction data on the frontend.
 
 ---
 
-### 8. `subgraph-candles`
+### 8. `firestarter-subgraph-candles`
 - **Description**: Subgraph to index candlestick data.
 - **Usage**: Display price charts in the main app and DEX interface.
 
 ---
 
-### 9. `data-feed`
+### 9. `firestarter-data-feed`
 - **Description**: Middleware that converts and normalizes data from subgraphs.
 - **Features**:
   - Fetch data from transaction and candles subgraphs.
@@ -138,14 +138,13 @@ If you're a new developer joining the team, follow this order to get familiar:
 
 
 ---
----
 # 🔥 Firestarter Smart Contract Deployment Guide
 
 This guide walks you through the full process of deploying the Firestarter smart contracts on `baseSepolia` (or your desired network). The deployment includes:
 - **Uniswap V2 Swap Infrastructure**
 - **Bonding Curve Module**
 - **Staking Module**
-# package: firestarter-smart-contracts
+## package: firestarter-smart-contracts
 
 ---
 
@@ -328,4 +327,276 @@ Get this block number from when the **Swap** contracts were deployed.
 ## ✅ Done!
 
 You’ve successfully deployed the entire Firestarter smart contract suite on `baseSepolia`.
+
+---
+# Deploy BE [updateing]
+
+### setup env
+```
+NODE_ENV=development
+PORT='3011' # app 
+WORKER_PORT='3002' # listener
+NETWORK=testnet # testnet mainnet
+
+POSTGRES_URL=
+
+REDIS_URL=
+
+### minio config
+MINIO_ACCESS_KEY=
+MINIO_SECRET_KEY=
+BUCKET_NAME=
+MINIO_HOST=
+MINIO_PORT=
+
+### ipfs pinata.cloud
+PINATA_JWT=
+
+### rpc for mainnet, testnet
+RPC=https://base-sepolia-rpc.publicnode.com
+RPC_WS=wss://base-sepolia-rpc.publicnode.com
+
+### listener -> event -> db redis -> kafka app main -> socket chart new tx, new meme fe
+KAFKA_BROKER=
+KAFKA_TOPIC_PREFIX='local-rwa' # optional
+KAFKA_RUNNING_FLAG=true # true enable kafka and socket
+
+### allocate whitelist 
+### admin wallet, match contract 
+PAYMENT_SIGNER=3c280e80ccf9d240b2ba5a2ff80a807383969cb35cfa1472151c7d044ad17b30
+ADMIN_WALLETS=0x835570356fD6ffC11A24EF7D5789ef437DB5067b,0xc8f4C885823eA8967e995A1240AE1A9b0783028c,0xe3d74ae28243d7ddf71319eb3531bec8228d75b3 [add admin wallet here]
+
+BLOCKPASS_API_ENDPOINT=https://kyc.blockpass.org
+BLOCKPASS_CLIENT_ID=firestartertrustscore_78b49
+BLOCKPASS_API_KEY=66c8ec27-055c-4b6c-a078-963c4990eb77
+BLOCKPASS_WEBHOOK_SECRET=
+
+JWT_SECRET=trustcore@123
+JWT_EXPIRES_IN=3600
+JWT_REFRESH_TOKEN_EXPIRES_IN=2592000
+```
+
+---
+# Firestarter Frontend
+
+1. edit file /src/smart-contract/addresses.ts
+```ts
+const addresses = {
+  accessManager: "0x51dab2305B424682F41EE75eF7249145B71ee607",
+  bondingCurve: "0xc192b472f568E7694Fd0f7Ccbbb75076b80f8aBf",
+  bondingCurveFactory: "0x52e13e7A39f9aA6b5f981dC7055efD685bBaeb45",
+  rwaTokenBond: [remove this one],
+  rwaTokenMain: "0xc705343DE5Cb1Cd9cE6684b6ca321b31D540bf5c",
+  pair: "0xEfD4FeFE9d2e3542b1102F5B7004241bE56ab7f4",
+  pairFactory: "0xDE9A867A37105A156a05FcD208779aE349188cE5",
+  router: "0xe0e4E95C9E4aa75516d40aBA8B320b5516b66c10",
+  stakingManager: "0x93A8a091D433bb321918C4Bb468FB266e7486dc8",
+  stakingBooster: "0xc23bBf2d8B28643E4B380672c0A4dBB40Dfa5469",
+  USDT: "0x34f2154457ccd316f26C7a9Be5D4B45d06af665D",
+  WETH: "0xF96c7bDE65A8F6d765192A64Bc75bfa05CEc3fEf",
+};
+```
+
+2. update env file
+```
+VITE_ENV=devnet
+VITE_API_URL=https://abc.com
+VITE_SOCKET_PATH=wss://abc.com
+VITE_NETWORK=devnet
+VITE_CREATION_FEE=20
+VITE_BONDING_CURVE_CAP=25000
+
+# Google OAuth Configuration
+VITE_GOOGLE_CLIENT_ID=364453051602-lxtgd2g9j3s1lr00pj5otgo9c30o1u0t.apps.googleusercontent.com
+
+# GitHub OAuth Configuration  
+VITE_GITHUB_CLIENT_ID=Ov23liOJSLQkrbZj46J0
+
+# Discord OAuth Configuration
+VITE_DISCORD_CLIENT_ID=1379791093586989108
+VITE_DISCORD_CLIENT_SECRET=BioZh8WrCjR8AfhfxXk_cANhdCu8E4xc
+
+# X/Twitter OAuth Configuration
+VITE_TWITTER_CLIENT_ID=T3pWbWVEY29pR3doaldteWhUdUI6MTpja2
+VITE_TWITTER_CLIENT_SECRET=9R8RECRDHOuFpZCT_7U4FwrPYI4WjAGllHmJq5x # Note: Replace with actual secret
+
+# Blockpass KYC Configuration
+VITE_BLOCKPASS_CLIENT_ID=blockpassid
+
+# Firebase Configuration
+VITE_FIREBASE_API_KEY=AIzaSyCbVOgKK54EZG3Qo3VPsbkrk4u3AziCceM
+VITE_FIREBASE_PROJECT_ID=firestarter-48198
+VITE_FIREBASE_AUTH_DOMAIN=firestarter-48198.firebaseapp.com
+VITE_FIREBASE_STORAGE_BUCKET=firestarter-48198.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=513830874400
+VITE_FIREBASE_APP_ID=1:513830874400:web:f1647b2f315dcb7c683b45
+```
+
+3. deploy with vercel or pm2 or dockers.
+
+---
+# Firestarter Admin
+
+1. edit file /src/smart-contract/addresses.ts
+```ts
+const addresses = {
+  accessManager: "0x51dab2305B424682F41EE75eF7249145B71ee607",
+  bondingCurve: "0xc192b472f568E7694Fd0f7Ccbbb75076b80f8aBf",
+  bondingCurveFactory: "0x52e13e7A39f9aA6b5f981dC7055efD685bBaeb45",
+  rwaTokenBond: [remove this one],
+  rwaTokenMain: "0xc705343DE5Cb1Cd9cE6684b6ca321b31D540bf5c",
+  pair: "0xEfD4FeFE9d2e3542b1102F5B7004241bE56ab7f4",
+  pairFactory: "0xDE9A867A37105A156a05FcD208779aE349188cE5",
+  router: "0xe0e4E95C9E4aa75516d40aBA8B320b5516b66c10",
+  stakingManager: "0x93A8a091D433bb321918C4Bb468FB266e7486dc8",
+  stakingBooster: "0xc23bBf2d8B28643E4B380672c0A4dBB40Dfa5469",
+  USDT: "0x34f2154457ccd316f26C7a9Be5D4B45d06af665D",
+  WETH: "0xF96c7bDE65A8F6d765192A64Bc75bfa05CEc3fEf",
+};
+```
+
+2. update env file
+```
+VITE_ENV=dev
+VITE_NETWORK=devnet
+VITE_API_URL=https://api.example.com
+```
+
+3. Deploy with vercel pm2 or dockers
+
+---
+# Firestarter-subgraph-transactions
+1. edit subgraph.yaml file 
+```
+specVersion: 0.0.5
+description: FirestarterSwap
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Factory
+    network: base-sepolia
+    source:
+      address: [pairFactory]
+      abi: Factory
+      startBlock: 27517178 //replace suitable block
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/factory.ts
+      entities:
+        - Pair
+        - Token
+      abis:
+        - name: Factory
+          file: ./abis/Factory.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: ERC20NameBytes
+          file: ./abis/ERC20NameBytes.json
+        - name: ERC20SymbolBytes
+          file: ./abis/ERC20SymbolBytes.json
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handlePairCreated
+templates:
+  - kind: ethereum/contract
+    name: Pair
+    network: base-sepolia
+    source:
+      abi: Pair
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/core.ts
+      entities:
+        - Pair
+        - Token
+      abis:
+        - name: Factory
+          file: ./abis/Factory.json
+        - name: Pair
+          file: ./abis/Pair.json
+      eventHandlers:
+        - event: Mint(indexed address,uint256,uint256)
+          handler: handleMint
+        - event: Burn(indexed address,uint256,uint256,indexed address)
+          handler: handleBurn
+        - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
+          handler: handleSwap
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Sync(uint112,uint112)
+          handler: handleSync
+
+```
+
+2. register an account on https://thegraph.com/studio/login
+3. create a subgraph
+4. select network
+5. authenticate: graph auth [your key]
+6. generate & build: graph codegen && graph build
+7. deploy: graph deploy test
+
+---
+# Firestarter-subgraph-candles
+1. edit subgraph.yaml file
+```
+specVersion: 0.0.4
+description: DEX trades candles (5m/15m/1h/4h/1d/1w)
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PairFactory
+    network: base-sepolia
+    source:
+      address: [pairFactory address]
+      abi: PairFactory
+      startBlock: 27517170 //suitable block
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mapping.ts
+      entities:
+        - Pair
+      abis:
+        - name: PairFactory
+          file: ./abis/PairFactory.json
+      eventHandlers:
+        - event: PairCreated(address,address,address,uint256,indexed address)
+          handler: handleNewPair
+templates:
+  - kind: ethereum/contract
+    name: Pair
+    network: base-sepolia
+    source:
+      abi: Pair
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mapping.ts
+      entities:
+        - Pair
+      abis:
+        - name: Pair
+          file: ./abis/Pair.json
+      eventHandlers:
+        - event: Swap(uint256,uint256,uint256,uint256,address,uint256,indexed address)
+          handler: handleSwap
+
+```
+
+2. register an account on https://thegraph.com/studio/login
+3. create a subgraph
+4. select network
+5. authenticate: graph auth [your key]
+6. generate & build: graph codegen && graph build
+7. deploy: graph deploy test
+
+---
 
