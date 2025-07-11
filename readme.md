@@ -435,7 +435,26 @@ RPC_WS=wss://base-sepolia-rpc.publicnode.com
 #RPC_WS=wss://base-sepolia-rpc.publicnode.com
 
 #RPC=https://base-sepolia.g.alchemy.com/v2/xX8Hb0UL7nxiTSXj583h0
-#RPC_WS=wss://bas
+#RPC_WS=wss://base-sepolia.g.alchemy.com/v2/xX8Hb0UL7nxiTSXj583h0
+
+# listener -> event -> db redis -> kafka app main -> socket chart new tx, new meme fe
+KAFKA_BROKER=localhost:39092
+KAFKA_TOPIC_PREFIX='local-rwa' # optional
+KAFKA_RUNNING_FLAG=true # true enable kafka and socket
+
+# allocate whitelist 
+# admin wallet, match contract 
+PAYMENT_SIGNER=3c280e80ccf9d240b2ba5a2ff80a807383969cb35cfa1472151c7d044ad17b30
+ADMIN_WALLETS=0x835570356fD6ffC11A24EF7D5789ef437DB5067b,0xc8f4C885823eA8967e995A1240AE1A9b0783028c,0xe3d74ae28243d7ddf71319eb3531bec8228d75b3
+
+BLOCKPASS_API_ENDPOINT=https://kyc.blockpass.org
+BLOCKPASS_CLIENT_ID=firestartertrustscore_78b49
+BLOCKPASS_API_KEY=66c8ec27-055c-4b6c-a078-963c4990eb77
+BLOCKPASS_WEBHOOK_SECRET=
+
+JWT_SECRET=trustcore@123
+JWT_EXPIRES_IN=3600
+JWT_REFRESH_TOKEN_EXPIRES_IN=2592000
 ```
 
 4. generate typechain
