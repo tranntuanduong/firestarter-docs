@@ -329,7 +329,7 @@ Get this block number from when the **Swap** contracts were deployed.
 You’ve successfully deployed the entire Firestarter smart contract suite on `baseSepolia`.
 
 ---
-# Deploy BE [updateing]
+# Deploy BE
 ### note: the env value will only valid for video. 
 before run backend service, please double check configfile (factory address, bonding address, route address...etc)
 
