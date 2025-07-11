@@ -332,49 +332,117 @@ You’ve successfully deployed the entire Firestarter smart contract suite on `b
 # Deploy BE [updateing]
 
 ### setup env
+1. setup posgresql, redis, zookeeper, kafka, minio please run docker-compose.yml file
+### note: the env value will only valid for video.
+before run backend service, please double check configfile (factory address, bonding address, route address...etc)
 ```
+version: '2'
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=1
+      - POSTGRES_DB=rwa
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    command: ["redis-server", "--requirepass", "foobared"]
+    ports:
+      - "6397:6379"
+    volumes:
+      - redis_data:/data
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    restart: always
+    environment:
+      - MINIO_ROOT_USER=development
+      - MINIO_ROOT_PASSWORD=123456789
+    command: server /data --console-address ":9001"
+    ports:
+      - "32126:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.2
+    container_name: zookeeper
+    restart: always
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+      - ZOOKEEPER_TICK_TIME=2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.3.2
+    container_name: kafka
+    restart: always
+    depends_on:
+      - zookeeper
+    ports:
+      - "39092:39092"
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:39092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:
+```
+
+2. update env file
+```
+\# local development production
 NODE_ENV=development
 PORT='3011' # app 
 WORKER_PORT='3002' # listener
 NETWORK=testnet # testnet mainnet
 
-POSTGRES_URL=
+POSTGRES_URL=postgres://root:1@localhost:5434/rwa
 
-REDIS_URL=
+REDIS_URL=redis://default:foobared@localhost:6397/0
 
-### minio config
-MINIO_ACCESS_KEY=
-MINIO_SECRET_KEY=
-BUCKET_NAME=
-MINIO_HOST=
-MINIO_PORT=
+# minio config
+MINIO_ACCESS_KEY=development
+MINIO_SECRET_KEY=123456789
+BUCKET_NAME=development
+MINIO_HOST=localhost
+MINIO_PORT=32126
 
-### ipfs pinata.cloud
-PINATA_JWT=
+# ipfs pinata.cloud
+PINATA_JWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJiY2E3MjAxNC05YjQwLTRiNDgtOTU2Yy1iYWRkNzQwYTQwMDEiLCJlbWFpbCI6Imx1Y2Fzdi53c3BhY2VAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInBpbl9wb2xpY3kiOnsicmVnaW9ucyI6W3siZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjEsImlkIjoiRlJBMSJ9LHsiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjEsImlkIjoiTllDMSJ9XSwidmVyc2lvbiI6MX0sIm1mYV9lbmFibGVkIjpmYWxzZSwic3RhdHVzIjoiQUNUSVZFIn0sImF1dGhlbnRpY2F0aW9uVHlwZSI6InNjb3BlZEtleSIsInNjb3BlZEtleUtleSI6IjVjOWNiMzk3ZTRhODRhZDc1YzY0Iiwic2NvcGVkS2V5U2VjcmV0IjoiMjU0ODc0MTZmYmQ4ZTM4MzY4OWQ4MjZhOGQ4ZmY5ZjE2NmRiYjQ4ZmVmMzVkODFhMjFjYTYwZDQ0NzQ0NWJlNSIsImV4cCI6MTc3MDE5NzY3Mn0.0VyPoNW61ia2ulnXTne0IWZteQd74PHDrAcmRWApt3Y
 
-### rpc for mainnet, testnet
+# rpc for mainnet, testnet
 RPC=https://base-sepolia-rpc.publicnode.com
 RPC_WS=wss://base-sepolia-rpc.publicnode.com
 
-### listener -> event -> db redis -> kafka app main -> socket chart new tx, new meme fe
-KAFKA_BROKER=
-KAFKA_TOPIC_PREFIX='local-rwa' # optional
-KAFKA_RUNNING_FLAG=true # true enable kafka and socket
+#RPC=https://base-sepolia-rpc.publicnode.com
+#RPC_WS=wss://base-sepolia-rpc.publicnode.com
 
-### allocate whitelist 
-### admin wallet, match contract 
-PAYMENT_SIGNER=3c280e80ccf9d240b2ba5a2ff80a807383969cb35cfa1472151c7d044ad17b30
-ADMIN_WALLETS=0x835570356fD6ffC11A24EF7D5789ef437DB5067b,0xc8f4C885823eA8967e995A1240AE1A9b0783028c,0xe3d74ae28243d7ddf71319eb3531bec8228d75b3 [add admin wallet here]
-
-BLOCKPASS_API_ENDPOINT=https://kyc.blockpass.org
-BLOCKPASS_CLIENT_ID=firestartertrustscore_78b49
-BLOCKPASS_API_KEY=66c8ec27-055c-4b6c-a078-963c4990eb77
-BLOCKPASS_WEBHOOK_SECRET=
-
-JWT_SECRET=trustcore@123
-JWT_EXPIRES_IN=3600
-JWT_REFRESH_TOKEN_EXPIRES_IN=2592000
+#RPC=https://base-sepolia.g.alchemy.com/v2/xX8Hb0UL7nxiTSXj583h0
+#RPC_WS=wss://bas
 ```
+
+3. install node_modules
+4. generate typechain
+5. sync & generate prisma
+6. build code
+7. run code
 
 ---
 # Firestarter Frontend
