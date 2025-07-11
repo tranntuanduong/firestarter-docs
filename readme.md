@@ -330,11 +330,11 @@ You’ve successfully deployed the entire Firestarter smart contract suite on `b
 
 ---
 # Deploy BE [updateing]
-
-### setup env
-1. setup posgresql, redis, zookeeper, kafka, minio please run docker-compose.yml file
-### note: the env value will only valid for video.
+### note: the env value will only valid for video. 
 before run backend service, please double check configfile (factory address, bonding address, route address...etc)
+
+1. install node_modules
+2. setup posgresql, redis, zookeeper, kafka, minio please run docker-compose.yml file
 ```
 version: '2'
 services:
@@ -405,7 +405,7 @@ volumes:
   minio_data:
 ```
 
-2. update env file
+3. update env file
 ```
 \# local development production
 NODE_ENV=development
@@ -438,7 +438,6 @@ RPC_WS=wss://base-sepolia-rpc.publicnode.com
 #RPC_WS=wss://bas
 ```
 
-3. install node_modules
 4. generate typechain
 5. sync & generate prisma
 6. build code
