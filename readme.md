@@ -305,11 +305,12 @@ Step 2. setup config on the dev.json file (/utils/config/dev.json)
 }
 
 ```
-note: 
--**In case your token can not be minted, please keep everything as it is.**
+### note: 
+-Incase your token can be minted, please keep everything as it is.
 
--**Incase yoyr token can minted, we need update code.
-in file StakingManager.sol comment rwa.mint on the updatePool and mintExtraReward, then please deposit an initial amount to the TokenSafekepper contract** 
+-Incase your token can not minted, we need update code in file StakingManager.sol 
+comment `rwa.mint` on the updatePool and mintExtraReward, then please deposit an initial amount to the TokenSafekepper contract
+
 
 ```ts
 
