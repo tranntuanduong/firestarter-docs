@@ -289,8 +289,9 @@ npx hardhat verify --network baseSepolia <Factory_Address>   "0x69E763952156090A
 ---
 
 ## C. Deploy Staking Contract
+Step 1: install node_modules, setup env file
 
-Step1. setup config on the dev.json file (/utils/config/dev.json)
+Step 2. setup config on the dev.json file (/utils/config/dev.json)
 ```ts
 {
     "TUSDT": "", //don't need this
@@ -337,7 +338,7 @@ function updatePool(address _stakeToken) public override {
 }
 ```
 
-Step 2: Run the commands in the `deploy.bash` file.
+Step 3: Run the commands in the `deploy.bash` file.
 
 
 ---
