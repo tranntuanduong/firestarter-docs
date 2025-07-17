@@ -290,9 +290,56 @@ npx hardhat verify --network baseSepolia <Factory_Address>   "0x69E763952156090A
 
 ## C. Deploy Staking Contract
 
-> The staking contract is deployed independently.
-step 1: edit file /utils/config/dev.json --> update RWA address token (orther field can ignore)
-using deploy.bash to deploy staking
+Step1. setup config on the dev.json file (/utils/config/dev.json)
+```ts
+{
+    "TUSDT": "", //don't need this
+    "WETH": "", //don't need this
+    "RWA": "0xc705343DE5Cb1Cd9cE6684b6ca321b31D540bf5c", --> RWA token, ANALOG token..etc
+    "RWANFT": "", //this one will auto matic generate when deploy
+    "StakingManager": "", //this one will auto matic generate when deploy
+    "TokenSafekeeper": "", //this one will auto matic generate when deploy
+    "StakingBooster": "", //this one will auto matic generate when deploy
+    "BoosterSettings": "" //this one will auto matic generate when deploy
+}
+
+```
+note: 
+-**In case your token can not be minted, please keep everything as it is.**
+-Incase yoyr token can minted, we need update code.
+in file StakingManager.sol comment rwa.mint on the updatePool and mintExtraReward, then please deposit an initial amount to the TokenSafekepper contract
+
+```ts
+
+function mintExtraReward(
+    address _stakeToken,
+    address _to,
+    uint256 _amount
+  ) external override onlyStakeTokenCallerContract(_stakeToken) {
+    // rwa.mint(_to, _amount);
+}
+
+function updatePool(address _stakeToken) public override {
+    PoolInfo storage pool = poolInfo[_stakeToken];
+    if (block.number <= pool.lastRewardBlock) {
+      return;
+    }
+    uint256 totalStakeToken = IERC20Upgradeable(_stakeToken).balanceOf(address(this));
+    if (totalStakeToken == 0) {
+      pool.lastRewardBlock = block.number;
+      return;
+    }
+    uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
+    uint256 rwaReward = multiplier.mul(rwaPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
+    // rwa.mint(address(tokenSafekeeper), rwaReward);
+    pool.accRWAPerShare = pool.accRWAPerShare.add(rwaReward.mul(1e12).div(totalStakeToken));
+    pool.lastRewardBlock = block.number;
+}
+```
+
+Step 2: Run the commands in the `deploy.bash` file.
+
+
 ---
 
 ## D. Update Backend with Deployed Addresses
